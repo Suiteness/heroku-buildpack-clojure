@@ -173,7 +173,11 @@ if [ ! -r $BUILD_DIR/Procfile ]; then
 fi
 
 echo "-----> Running migrations"
-lein tern migrate
+echo "       Running: lein tern migrate"
+cd $BUILD_DIR
+PATH=.lein/bin:$PATH JVM_OPTS="-Xmx600m" \
+  LEIN_JVM_OPTS="-Xmx400m -Duser.home=$BUILD_DIR" \
+  lein tern migrate
 
 # repack cache with new assets
 rm -rf $CACHE_STORE_DIR
