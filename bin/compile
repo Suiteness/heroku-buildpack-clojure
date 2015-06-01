@@ -172,6 +172,9 @@ if [ ! -r $BUILD_DIR/Procfile ]; then
   fi
 fi
 
+echo "-----> Running migrations"
+lein tern migrate
+
 # repack cache with new assets
 rm -rf $CACHE_STORE_DIR
 mkdir -p $(dirname $CACHE_STORE_DIR)
