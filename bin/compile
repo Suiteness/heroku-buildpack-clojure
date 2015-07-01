@@ -179,6 +179,13 @@ PATH=.lein/bin:$PATH JVM_OPTS="-Xmx600m" \
   LEIN_JVM_OPTS="-Xmx400m -Duser.home=$BUILD_DIR" \
   lein tern migrate
 
+echo "-----> Running seeds"
+echo "       Running: lein import all"
+cd $BUILD_DIR
+PATH=.lein/bin:$PATH JVM_OPTS="-Xmx600m" \
+  LEIN_JVM_OPTS="-Xmx400m -Duser.home=$BUILD_DIR" \
+  lein import all
+
 # repack cache with new assets
 rm -rf $CACHE_STORE_DIR
 mkdir -p $(dirname $CACHE_STORE_DIR)
