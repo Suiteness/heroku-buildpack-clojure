@@ -44,7 +44,7 @@ if [ "$(grep ":min-lein-version[[:space:]]\+\"2" $BUILD_DIR/project.clj)" != "" 
   LEIN_VERSION="2.5.1"
   LEIN_BIN_SOURCE="$(dirname $0)/../opt/lein2"
   if [ "$(grep :uberjar-name $BUILD_DIR/project.clj)" != "" ]; then
-      LEIN_BUILD_TASK="${LEIN_BUILD_TASK:-"ring uberjar"}"
+      LEIN_BUILD_TASK="${LEIN_BUILD_TASK:-"with-profile production do ring uberjar, tern migrate, import all"}"
       LEIN_INCLUDE_IN_SLUG="${LEIN_INCLUDE_IN_SLUG:-no}"
   else
       LEIN_BUILD_TASK=${LEIN_BUILD_TASK:-"with-profile production compile :all"}
@@ -171,20 +171,6 @@ if [ ! -r $BUILD_DIR/Procfile ]; then
     echo "web: lein with-profile production trampoline run" > $BUILD_DIR/Procfile
   fi
 fi
-
-echo "-----> Running migrations"
-echo "       Running: lein tern migrate"
-cd $BUILD_DIR
-PATH=.lein/bin:$PATH JVM_OPTS="-Xmx600m" \
-  LEIN_JVM_OPTS="-Xmx400m -Duser.home=$BUILD_DIR" \
-  lein tern migrate
-
-echo "-----> Running seeds"
-echo "       Running: lein import all"
-cd $BUILD_DIR
-PATH=.lein/bin:$PATH JVM_OPTS="-Xmx600m" \
-  LEIN_JVM_OPTS="-Xmx400m -Duser.home=$BUILD_DIR" \
-  lein import all
 
 # repack cache with new assets
 rm -rf $CACHE_STORE_DIR
